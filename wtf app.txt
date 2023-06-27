@@ -1,0 +1,59 @@
+// Import the necessary libraries
+using System;
+using System.ServiceModel;
+
+// Define the messaging service contract
+[ServiceContract]
+public interface IMessagingService
+{
+    [OperationContract]
+    void SendMessage(string message);
+
+    [OperationContract]
+    string ReceiveMessage();
+}
+
+// Implement the messaging service contract
+public class MessagingService : IMessagingService
+{
+    public void SendMessage(string message)
+    {
+        Console.WriteLine("Sending message: " + message);
+        // Code to send the message goes here
+    }
+
+    public string ReceiveMessage()
+    {
+        // Code to receive the message goes here
+        string receivedMessage = "Sample received message";
+        Console.WriteLine("Received message: " + receivedMessage);
+        return receivedMessage;
+    }
+}
+
+// Set up the service host
+class Program
+{
+    static void Main()
+    {
+        // Specify the IP address and port
+        string ipAddress = "buraya ip adresi yazın";
+        int port = 8080;
+        //babarosso("kemaltalhaekici")
+        // Create the service host
+        using (ServiceHost host = new ServiceHost(typeof(MessagingService), new Uri("http://" + ipAddress + ":" + port)))
+        {
+            // Add an endpoint
+            host.AddServiceEndpoint(typeof(IMessagingService), new BasicHttpBinding(), "");
+
+            // Open the service host
+            host.Open();
+
+            Console.WriteLine("Messaging service is running. Press Enter to exit.");
+            Console.ReadLine();
+
+            // Close the service host
+            host.Close();
+        }
+    }
+}
